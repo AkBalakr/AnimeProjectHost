@@ -1,0 +1,138 @@
+const sqlite3 = require('sqlite3').verbose();
+
+
+
+//Creates a table with the schema (id, title, genre, ranking). id is automatically generated when an entry is inserted into the DB
+q_createTable = `CREATE TABLE IF NOT EXISTS anime (id INTEGER PRIMARY KEY, title, studios, genres, themes, year, demographics, synopsis, images)`;
+
+//Template for inserting animes. Question marks will be replaced with values during db.run()
+q_insertAnime = "INSERT INTO anime (id, title, studios, genres, themes, year, demographics, synopsis, images) VALUES (?,?,?,?,?,?,?,?,?)"
+
+//Selects all entries from the anime table
+q_selectAnime = `SELECT * FROM anime`;
+
+q_selectAnimeById = `SELECT * FROM anime WHERE id = ?`
+
+function dropAnimeTable(db, callback) {
+	console.log("DROPPING TABLE");
+	db.run("DROP TABLE IF EXISTS anime");
+	callback();
+}
+
+function createAnimeTable(db) {
+	console.log("CREATING TABLE");
+	db.run(createTable);
+}
+
+function insertAnime(db, animeJson) {
+	console.log(`INSERTING ${animeJson.id} - ${animeJson.title} into DATABASE`);
+	db.run(q_insertAnime, [animeJson.id, animeJson.title, JSON.stringify(animeJson.studios), JSON.stringify(animeJson.genres),
+				JSON.stringify(animeJson.themes), JSON.stringify(animeJson.year), JSON.stringify(animeJson.demographics), JSON.stringify(animeJson.synopsis), JSON.stringify(animeJson.images)],
+	(err) => {
+		if (err) return console.error(err.message);
+	});
+}
+
+function printAllAnimes(db) {
+	console.log("PRINTING All ANIMES IN DATABASE");
+	db.all(selectAnime, [], (err, rows) => {
+		if (err) return console.error(err.message);
+		rows.forEach(row => {
+			console.log(JSON.stringify(animeRowToJSON(row), null, 2));
+		})
+	})
+	
+}
+
+function animeTableRowCount(db) {
+	try {
+		db.get("SELECT COUNT(*) as count FROM anime", (err, row) => {
+			if (err) {
+				console.error(err.message);
+				return;
+			}
+
+			console.log("Num of rows in anime table: " + row.count);
+		})		
+	} catch (error) {
+		console.log(error)
+	}
+}
+
+//Converts a row from the anime table into a JSON format
+function animeRowToJSON(row) {
+	let animeJSON = {
+		id: row.id,
+		title: row.title,
+		studios: JSON.parse(row.studios),
+		genres: JSON.parse(row.genres),
+		themes: JSON.parse(row.themes),
+		year: row.year,
+		demographics: JSON.parse(row.demographics),
+		synopsis: JSON.parse(row.synopsis),
+		images: JSON.parse(row.images)
+	}
+
+	return animeJSON;
+}
+
+//Returns an anime from the database as a JSON
+function selectAnimeById(db, id) {
+	console.log("Getting anime of id: " + id);
+	try {
+		db.get(q_selectAnimeById, [id], (err, row) => {
+			if (err) {
+				console.error(err.message);
+				return;
+			}
+			if (row == null) {
+				console.error(id + " is not a valid animeID");
+				return;
+			}
+			console.log(JSON.stringify(convertRowToAnimeJSON(row),null,2));
+		})
+	}
+	catch (error) {
+		console.log(error);
+	}
+}
+
+// "INSERT INTO anime (id, title, studios, genres, themes, year, demographics, synopsis, images) VALUES (?,?,?,?,?,?,?,?,?)"
+function convertRowToAnimeJSON(row) {
+	let animeJSON = {
+		id: row.id,
+		title: row.title,
+		studios: JSON.parse(row.studios),
+		genres: JSON.parse(row.genres),
+		themes: JSON.parse(row.themes),
+		year: JSON.parse(row.year),
+		demographics: JSON.parse(row.demographics),
+		synopsis: JSON.parse(row.synopsis),
+		images: JSON.parse(row.images)
+	}
+
+	console.log(animeJSON);
+}
+
+function animeIdIsValid(db, id) {
+	return new Promise((resolve, reject) => {
+		try {
+			db.get(q_selectAnimeById, [id], (err, row) => {
+				if (err) {
+					console.error(err.message);
+					reject();
+				}
+				if (row == null) {
+					console.error(id + " is not a valid animeID");
+					reject();
+				}
+				resolve();
+			})
+		}
+		catch(error) {
+			console.log(error);
+		}		
+	})
+}
+
+module.exports = {dropAnimeTable, createAnimeTable, insertAnime, printAllAnimes, animeTableRowCount, selectAnimeById, convertRowToAnimeJSON, animeIdIsValid}

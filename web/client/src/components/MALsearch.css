@@ -1,0 +1,41 @@
+.malSearch-container{
+    display: flex; 
+    width: 100vw;
+    justify-content: flex-end;
+    background-color: #191b1e;
+    margin-bottom: 5px;
+    margin-top: 2px;
+}
+.mal-searchbar{
+    display: flex;
+    justify-items: flex-end;
+    margin-right: 14px;
+}
+
+.MAL-input{
+    border-radius: 4px;
+    border: none
+}
+
+.MAL-input::placeholder{
+    font-weight: bold; 
+}
+
+.search-button {
+    color: #e91e63;
+    background-color: #282c34;
+    font-weight: bold;
+    border: none
+}
+
+.search-button:hover{
+    color:#282c34;
+    background-color: #e91e63;
+    cursor:zoom-in
+}
+
+*:focus {
+    outline: none !important; 
+    box-shadow: 0 0 100px #719ECE;   
+}
+

@@ -1,0 +1,193 @@
+:root {
+  --ul-width: 250px;
+  --li-height: 100px;
+}
+.Header {
+    background-color: #282c34;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: clamp(16px, 1vw, 22px);;
+  }
+  
+  .Header h1 {
+    font-weight: normal;
+    font-size: clamp(1rem, 2vw, 8rem);
+    /* text-align: center; */
+  }
+  
+  .Header strong {
+    font-weight: bold;
+    color: #e91e63;
+  }
+  
+  .searchBar {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+  }
+
+  @keyframes spin {
+    0% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  } 
+
+  .instruction {
+    margin-right: 120px;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    animation: spin 1.5s infinite linear;  
+    color: #e91e63;
+  }
+
+  .searchBar input {
+    padding: 8px;
+    font-size: clamp(1rem, 1vw, 5rem);
+    width: 300px;
+    border: none;
+    border-radius: 4px;
+  }
+
+  .Header ul {
+    position: absolute;
+    list-style-type: none;
+    /* margin-left: 42%; */
+    width: var(--ul-width);
+    background-color: rgb(45, 45, 45);
+    text-align: center;
+    padding: 2px;
+    margin: 0;
+  }
+  
+  ul:hover {
+    /* border: 2px solid; */
+    /* border-color: rgb(232, 85, 88); */
+    cursor: pointer;
+  }
+  
+  .Header li {
+    display: flex;
+    /* align-self: center; */
+    /* flex-direction: column; */
+    /* margin: 2.5%; */
+    /* padding: 5%; */
+    width: 95%;
+    height: var(--li-height);
+    /* position: relative; */
+    /* padding-top: 10px; */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+  }
+
+  .dropdown {
+    z-index: 2;
+    position: sticky;
+    transform: translate(50%);
+  }
+  .dropdown li:hover{
+    /* height: scale(5); */
+    /* margin-top: 10%; */
+    height: 100px;
+    width: var(--ul-width);
+    z-index: 1;
+    border: 2px solid;
+    /* border-color: rgb(232, 85, 88); */
+    cursor: pointer;
+  }
+
+  
+  li:hover .animeTitle {
+    transform: translate(0%, calc(-1 * var(--var(--li-height))));
+    width: 100%;
+    max-width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  
+  .animeTitle {
+    /* display: flex; */
+    transform: translate(0%);
+    width: 75%;
+    text-emphasis-color: gray;
+    top: 0; /* Position the title at the top */
+    transition: top 0.3s, left 0.3s; /* Add transition effect */
+    transition: width 0.3s ease;
+  }
+
+  .animePic {
+    /* position: flex; */
+    /* display: flex; */
+    width: 25%;
+    height: var(--li-height);
+    background-size: cover;
+    /* transform: translate(0%, 100%); */
+    /* margin-right: 10px; */
+    transition: top 0.3s, left 0.3s; /* Add transition effect */
+  }
+
+  li:hover .animePic{
+    /* width: 75px;
+    height: 200px; */
+    transform: translate(-100%);
+  }
+  
+  .description {
+    background-color: rgb(61, 61, 61);
+    display: none;
+    position: absolute;
+    overflow: hidden;
+    /* text-overflow: ellipsis; */
+    width: 100%;
+    max-height: 100%;
+    transition: max-width 0.3s ease-in-out, max-height 0.3s ease-in-out;
+    font-size: clamp(9px, 1vw, 12px);
+    overflow-y: auto; /* vertical scrolling */
+
+  }
+  
+  li:hover .description {
+    display: flex;
+    transform: translate(0%, 20px);
+    max-width: 98%;
+    max-height: 80px;
+  }
+  
+  .recommendation-switch {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    align-items: flex-start; /* Align items to the left */
+    font-size: clamp(0.75rem, 0.75vw, 2rem); /* Set minimum font size*/
+    position: absolute;
+    top: 10px;
+    left: 10px;
+  }
+  
+  .toggle-button {
+    background-color: #282c34;
+    color: white;
+    padding: 10px 20px;
+    border: 2px solid #e91e63;
+    border-radius: 5px;
+    font-size: clamp(1rem, 1vw, 5rem); /* Set minimum font size */
+    cursor: pointer;
+  }
+
+  .toggle-button:hover {
+    background-color: #e91e63;
+    color: white;
+  }
+ 
+  
+
+  
